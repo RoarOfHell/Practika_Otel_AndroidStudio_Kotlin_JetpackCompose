@@ -3,4 +3,8 @@
     <string name="title_activity_room_info">RoomInfo</string>
     <string name="title_activity_booking">BookingActivity</string>
     <string name="title_activity_booking_accept">BookingAcceptActivity</string>
+    <string name="title_activity_autorization">AutorizationActivity</string>
+    <string name="title_activity_registration">RegistrationActivity</string>
+    <string name="title_activity_check_account">CheckAccountActivity</string>
+    <string name="title_activity_loading">LoadingActivity</string>
 </resources>

@@ -1,10 +1,12 @@
 package com.example.praktica
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -17,19 +19,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.praktica.models.*
 import com.example.praktica.ui.theme.PrakticaTheme
+import com.example.praktica.views.AutorizationActivity
 
 private var mainActivity: MainActivity? = null
-var userId = 0
+
 private var bookings = mutableStateOf(Bookings())
 var rooms = mutableStateOf(Rooms())
 
@@ -68,7 +73,7 @@ fun Greeting(name: String) {
 @Composable
 fun DefaultPreview() {
     PrakticaTheme {
-        Greeting("Android")
+        ProfileMenu()
     }
 }
 
@@ -105,7 +110,7 @@ fun MainMenuPanel(navController: NavController){
             }
             Spacer(Modifier.weight(1f, true))
             IconButton(onClick = { navController.navigate("ProfileMenu")
-                GetAllBooking(userId, onThreadComplite = {value -> bookings.value = value })}, modifier = Modifier
+                GetAllBooking(userInfo.value.id!!.toInt(), onThreadComplite = { value -> bookings.value = value })}, modifier = Modifier
                 .height(50.dp)
                 .width(50.dp)) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -140,15 +145,34 @@ fun SearchMenu(){
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun ProfileMenu(){
-    LazyColumn(modifier = Modifier.fillMaxSize(),
-        content = {
-            itemsIndexed(bookings.value.bookings){it, booking ->
-                var room: Room = Room()
-                GetRoomAtId(booking.roomId!!.toInt(), rooms.value, result = {value -> room = value})
-                BlockRoomBooking(booking = booking, room = room, context = mainActivity!!)
+    Column(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = Modifier
+            .fillMaxWidth()
+            .height(60.dp)
+            .background(Color.Gray)){
+            Text(text = "Профиль", fontSize = 18.sp, modifier = Modifier.padding(15.dp))
+            TextButton(modifier = Modifier
+                .align(Alignment.CenterEnd)
+                .padding(15.dp),
+                onClick = { RemoveSaveUser(mainActivity!!)
+                val autorization = Intent(mainActivity!!, AutorizationActivity::class.java)
+                mainActivity!!.startActivity(autorization)
+            }) {
+                Text(text = "Выйти", color = Color.Red)
             }
         }
-    )
+        LazyColumn(modifier = Modifier
+            .fillMaxSize()
+            .padding(0.dp, 0.dp, 0.dp, 85.dp),
+            content = {
+                itemsIndexed(bookings.value.bookings){it, booking ->
+                    var room: Room = Room()
+                    GetRoomAtId(booking.roomId!!.toInt(), rooms.value, result = {value -> room = value})
+                    BlockRoomBooking(booking = booking, room = room, context = mainActivity!!)
+                }
+            }
+        )
+    }
 
 }
 

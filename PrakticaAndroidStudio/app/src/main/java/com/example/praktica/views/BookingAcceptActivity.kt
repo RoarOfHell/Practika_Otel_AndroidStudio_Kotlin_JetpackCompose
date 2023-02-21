@@ -19,7 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.praktica.models.CompliteBooking
 import com.example.praktica.models.Room
-import com.example.praktica.userId
+import com.example.praktica.models.userInfo
+
 import com.example.praktica.views.ui.theme.PrakticaTheme
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -101,7 +102,7 @@ fun Greeting3() {
             }
             Button(onClick = {
 
-                CompliteBooking(room = room!!, fullName = fullName, price = roomPrice, dateIn = dateIn, dateOut = dateOut, userId = userId )
+                CompliteBooking(room = room!!, fullName = fullName, price = roomPrice, dateIn = dateIn, dateOut = dateOut, userId = userInfo.value.id!!.toInt() )
                 Toast.makeText(bookingActivity, "Успешно", Toast.LENGTH_SHORT).show()
                 bookingActivity!!.finish()
             },
